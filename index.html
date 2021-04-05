@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title>PDAP - Current Status</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+
+    <script src="js/jquery.js"></script>
+    <link rel="stylesheet" href="css/leaflet-1.7.1.css"/>
+    <script src="js/leaflet-1.7.1.js"></script>
+
+
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+			background-color: #191a1a;
+		}
+		#map {
+			width: 100%;
+			height: 100%;
+			z-index: 1000;
+		}
+		.loading{
+			position: absolute;
+			left: calc(50% - 25px);
+			align-self: center;
+			z-index: 1;
+			width: 25px;
+			height: 25px;
+		}
+	</style>
+
+	
+</head>
+<body style="display: flex">
+
+<img class="loading" src="loading.gif" />
+
+<div id='map'></div>
+
+<script src="js/status.js" type="text/javascript"></script>
+<!-- too big of a file to upload, can be found here https://opendata.arcgis.com/datasets/221d727bbc044ce99dc05fbce913b4a1_0.geojson-->
+<script src="js/US_States.js" type="text/javascript"></script>
+
+<script>
+	$(document).ready(function() {
+		$('.loading').hide();
+	});
+
+	var map = L.map('map').setView([39.6660603, -90.607896], 3.6);
+
+	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox/dark-v9',
+		tileSize: 512,
+		zoomOffset: -1
+	}).addTo(map);
+
+	// give each state a popup
+	function onEachFeature(feature, layer) {
+		var popupContent = "<p>" + feature.properties.STATE_NAME + " - " + hr_statuses[current_state[feature.properties.STATE_NAME]] + "</p> <a target='_blank' href='https://github.com/Police-Data-Accessibility-Project/Scrapers/tree/master/USA/"+abbreviations[feature.properties.STATE_NAME]+"'>Check it out on GitHub!</a>";
+
+		if (feature.properties && feature.properties.popupContent) {
+			popupContent += feature.properties.popupContent;
+		}
+
+		layer.bindPopup(popupContent);
+	}
+
+	L.geoJSON(states, {
+
+		style: function(feature) {
+			console.log(feature.properties.STATE_NAME + ': ' +current_state[feature.properties.STATE_NAME]);
+			return {color: statuses[current_state[feature.properties.STATE_NAME]]};
+			
+    	},
+
+		onEachFeature: onEachFeature
+	}).addTo(map);
+
+	
+
+</script>
+
+
+
+</body>
+</html>
