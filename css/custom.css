@@ -1,0 +1,29 @@
+
+
+html, body {
+    font-family: 'Roboto Mono';
+    height: 100%;
+    margin: 0;
+    background-color: #191a1a;
+}
+#map {
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+}
+
+ul#menu li {
+    display:inline;
+    align-self: center;
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  #menu li a {
+      text-decoration: none;
+      color: #fff;
+  }
+  #menu li a:hover {
+    text-decoration: underline;
+    color: #fff;
+}

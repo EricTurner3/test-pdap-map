@@ -1,2 +1,12 @@
-js/US_Counties.js
-js/US_States.js
+
+# hide the libraries we use
+js/bootstrap.bundle.min.js
+js/bootstrap.bundle.min.js.map
+js/jquery
+js/leaflet.js
+js/leaflet.js.map
+
+css/bootstrap.min.css
+css/bootstrap.min.css.map
+css/leaflet.css
+.DS_Store
