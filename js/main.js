@@ -24,8 +24,8 @@ var police_station = L.icon({
     iconUrl: '/images/police-station.svg',
 
     iconSize:     [38, 95], // size of the icon
-    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+    iconAnchor:   [18, 45], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
 });
 
 // give each state a popup
@@ -86,24 +86,23 @@ var state_geojson = L.geoJSON(states, {
         }
 
         // Fetch Police Agencies from DoltHub
-        var sql = "SELECT * FROM `agencies` where state_iso = '"+state_abbr+"'";
-        var url = dolt_datasets + encodeURIComponent(sql);
-        console.log('Fetching agencies from: '+ url);
+        //var sql = "SELECT * FROM `agencies` where state_iso = '"+state_abbr+"'";
+        //var url = dolt_datasets + encodeURIComponent(sql);
+        //console.log('Fetching agencies from: '+ url);
         var settings = {
-            "url": url,
+            "url": '/dolt.php?state=' + state_abbr,
             "method": "GET",
-            "timeout": 0,
-            "crossDomain":true
+            "timeout": 0
         };
 
-        $.ajax(settings).done(function (response) {
+        $.getJSON(settings).done(function (response) {
             console.log(response);
-            var result = JSON.parse(response);
+            //var result = JSON.parse(response);
 
-            var rows = result['rows'];
+            var rows = response.rows;
             // add to the map
             rows.forEach(agency => {
-                L.marker([agency['lat'], agency['lng']], {icon: greenIcon}).addTo(map).bindPopup("<p>"+agency['name']+"<p>");
+                L.marker([agency['lat'], agency['lng']], {icon: police_station}).addTo(map).bindPopup("<p>"+agency['name']+"<p>");
             });
         });
         
